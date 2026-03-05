@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Blue Lily Document Library</title>
+    <style>
+      :root {
+        --bg1:#EAF4FF;
+        --bg2:#DDEEFF;
+        --card:rgba(255,255,255,.72);
+        --stroke:rgba(10,46,110,.10);
+        --text:#0B1B3A;
+        --muted:rgba(11,27,58,.70);
+        --shadow:0 14px 40px rgba(10,46,110,.10);
+        --radius:18px;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin:0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        color:var(--text);
+        background:
+          radial-gradient(900px 420px at 20% 0%, rgba(13,99,214,.22), transparent 60%),
+          radial-gradient(820px 420px at 80% 10%, rgba(0,196,255,.18), transparent 55%),
+          linear-gradient(180deg, var(--bg1), var(--bg2));
+        min-height:100vh;
+      }
+      .container { max-width:1080px; margin:0 auto; padding:28px 18px 40px; }
+
+      .brand {
+        display:grid;
+        place-items:center;
+        gap:12px;
+        margin-bottom:14px;
+        text-align:center;
+      }
+      .logo {
+        width:96px; height:96px;
+        border-radius:24px;
+        background:rgba(255,255,255,.75);
+        border:1px solid var(--stroke);
+        box-shadow:var(--shadow);
+        display:grid;
+        place-items:center;
+        overflow:hidden;
+      }
+      .logo img { width:86%; height:86%; object-fit:contain; display:block; }
+      .appname { font-weight:900; letter-spacing:.2px; font-size:22px; }
+      .subtitle { color:var(--muted); font-size:13px; margin-top:-6px; }
+
+      .topbar { display:flex; justify-content:center; margin: 14px 0 0; }
+      .tabs {
+        display:flex;
+        gap:10px;
+        padding:8px;
+        border-radius:999px;
+        background:rgba(255,255,255,.55);
+        border:1px solid var(--stroke);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 26px rgba(10,46,110,.08);
+      }
+      .tab {
+        border:1px solid transparent;
+        background:transparent;
+        padding:10px 14px;
+        border-radius:999px;
+        cursor:pointer;
+        font-weight:900;
+        color: rgba(11,27,58,.80);
+      }
+      .tabActive {
+        background: linear-gradient(180deg, rgba(13,99,214,.95), rgba(11,79,174,.95));
+        color:#fff;
+        box-shadow: 0 10px 22px rgba(13,99,214,.18);
+      }
+
+      .controls {
+        display:grid;
+        gap:12px;
+        margin:16px auto 18px;
+        max-width:820px;
+      }
+      .search {
+        width:100%;
+        padding:14px 14px;
+        border-radius:999px;
+        border:1px solid var(--stroke);
+        background:rgba(255,255,255,.72);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 6px 20px rgba(10,46,110,.06);
+        outline:none;
+        font-size:15px;
+      }
+
+      .grid { display:grid; gap:14px; max-width:980px; margin:0 auto; }
+      .doc {
+        background:var(--card);
+        border:1px solid var(--stroke);
+        border-radius:var(--radius);
+        padding:14px;
+        box-shadow: 0 8px 26px rgba(10,46,110,.08);
+        backdrop-filter: blur(12px);
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:14px;
+      }
+      .left { min-width:0; display:grid; gap:6px; }
+      .title {
+        font-weight:900;
+        font-size:15px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
+      .meta {
+        color:var(--muted);
+        font-size:12px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
+      .tags { display:flex; flex-wrap:wrap; gap:8px; }
+      .tag {
+        font-size:11px;
+        padding:6px 10px;
+        border-radius:999px;
+        border:1px solid rgba(13,99,214,.18);
+        color: rgba(11,27,58,.85);
+        background: rgba(255,255,255,.55);
+      }
+      .actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+      a.btn {
+        cursor:pointer;
+        border:1px solid rgba(13,99,214,.22);
+        background: rgba(255,255,255,.58);
+        color:var(--text);
+        border-radius:999px;
+        padding:10px 12px;
+        font-weight:900;
+        font-size:13px;
+        backdrop-filter: blur(10px);
+        text-decoration:none;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+      }
+      a.btn:hover { background: rgba(255,255,255,.72); }
+      a.btnPrimary {
+        border:1px solid rgba(13,99,214,.25);
+        background: linear-gradient(180deg, rgba(13,99,214,.95), rgba(11,79,174,.95));
+        color:#fff;
+        box-shadow: 0 10px 22px rgba(13,99,214,.18);
+      }
+      a.btnPrimary:hover { filter: brightness(1.03); }
+
+      .foot {
+        max-width:980px;
+        margin:18px auto 0;
+        color: rgba(11,27,58,.55);
+        font-size:12px;
+        text-align:center;
+      }
+
+      @media (max-width:640px) {
+        .logo { width:84px; height:84px; border-radius:22px; }
+        .appname { font-size:20px; }
+        .doc { flex-direction:column; align-items:stretch; }
+        .actions { justify-content:flex-start; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="brand">
+        <div class="logo">
+          <img alt="Blue Lily Properties" src="assets/blue-lily-logo.jpeg" />
+        </div>
+        <div class="appname">Blue Lily Document Library</div>
+        <div class="subtitle">Fast access to client-ready documents</div>
+      </div>
+
+      <div class="topbar">
+        <div class="tabs" role="tablist" aria-label="Document packs">
+          <button class="tab tabActive" id="tabSales" role="tab" aria-selected="true" onclick="setPack('sales')">Sales</button>
+          <button class="tab" id="tabRental" role="tab" aria-selected="false" onclick="setPack('rental')">Rental</button>
+          <button class="tab" id="tabOther" role="tab" aria-selected="false" onclick="setPack('other')">Other</button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <input class="search" id="q" placeholder="Search documents..." />
+      </div>
+
+      <div class="grid" id="list"></div>
+
+      <div class="foot">
+        PDFs open in-browser on most devices. DOCX files typically download or open in Word/Google Docs.
+      </div>
+    </div>
+
+    <script>
+      const SALES_DOCS = [
+  {
+    "id": "otp-freehold",
+    "title": "Offer to Purchase – Freehold",
+    "category": "Offers to Purchase",
+    "tags": [
+      "OTP",
+      "Freehold"
+    ],
+    "viewUrl": "assets/sales/Blue Lily Eastrand OTP.pdf",
+    "downloadUrl": "assets/sales/Blue Lily Eastrand OTP.pdf"
+  },
+  {
+    "id": "otp-sectional",
+    "title": "Offer to Purchase – Sectional Title",
+    "category": "Offers to Purchase",
+    "tags": [
+      "OTP",
+      "Sectional Title"
+    ],
+    "viewUrl": "assets/sales/Blue Lily Eastrand OTP Sectional.pdf",
+    "downloadUrl": "assets/sales/Blue Lily Eastrand OTP Sectional.pdf"
+  },
+  {
+    "id": "mandate-multi",
+    "title": "Multi Mandate (Brakpan)",
+    "category": "Mandates",
+    "tags": [
+      "Mandate",
+      "Seller"
+    ],
+    "viewUrl": "assets/sales/Blue Lily Multi Mandate Brakpan 10042025 (1).pdf",
+    "downloadUrl": "assets/sales/Blue Lily Multi Mandate Brakpan 10042025 (1).pdf"
+  },
+  {
+    "id": "mandatory-disclosure",
+    "title": "Mandatory Disclosure / Condition Report",
+    "category": "Compliance",
+    "tags": [
+      "Disclosure",
+      "Condition Report"
+    ],
+    "viewUrl": "assets/sales/Mandatory Disclosure 2025.pdf",
+    "downloadUrl": "assets/sales/Mandatory Disclosure 2025.pdf"
+  }
+];
+      const RENTAL_DOCS = [
+  {
+    "id": "rental-application",
+    "title": "Rental Application Form",
+    "category": "Applications",
+    "tags": [
+      "Application",
+      "Tenant"
+    ],
+    "viewUrl": "assets/rental/RentalApplicationForm (1).docx",
+    "downloadUrl": "assets/rental/RentalApplicationForm (1).docx"
+  },
+  {
+    "id": "permission-to-place",
+    "title": "Permission to Place",
+    "category": "Approvals",
+    "tags": [
+      "Approval",
+      "Landlord"
+    ],
+    "viewUrl": "assets/rental/Permission.docx",
+    "downloadUrl": "assets/rental/Permission.docx"
+  },
+  {
+    "id": "lease-natural-person",
+    "title": "Residential Lease Agreement (Natural Person)",
+    "category": "Lease Agreements",
+    "tags": [
+      "Lease",
+      "Natural Person"
+    ],
+    "viewUrl": "assets/rental/Natural_Person_Lease.docx",
+    "downloadUrl": "assets/rental/Natural_Person_Lease.docx"
+  },
+  {
+    "id": "landlord-mandate-natural-person",
+    "title": "Landlord Mandate Agreement (Natural Person)",
+    "category": "Mandates",
+    "tags": [
+      "Mandate",
+      "Landlord"
+    ],
+    "viewUrl": "assets/rental/Landlord Natural Person Mandate New (003).docx",
+    "downloadUrl": "assets/rental/Landlord Natural Person Mandate New (003).docx"
+  },
+  {
+    "id": "power-of-attorney-natural-person",
+    "title": "Special Power of Attorney (Natural Person)",
+    "category": "Authorisations",
+    "tags": [
+      "Power of Attorney",
+      "Landlord"
+    ],
+    "viewUrl": "assets/rental/Power_of_Attorney_Natural (2).docx",
+    "downloadUrl": "assets/rental/Power_of_Attorney_Natural (2).docx"
+  }
+];
+      const OTHER_DOCS = [
+  {
+    "id": "code-of-conduct",
+    "title": "Blue Lily Property Group – Code of Conduct",
+    "category": "Company",
+    "tags": [
+      "Policy",
+      "Conduct"
+    ],
+    "viewUrl": "assets/other/Blue Lily Code of Conduct.pdf",
+    "downloadUrl": "assets/other/Blue Lily Code of Conduct.pdf"
+  },
+  {
+    "id": "letterhead-dalview",
+    "title": "Blue Lily Letterhead (Dalview)",
+    "category": "Branding",
+    "tags": [
+      "Letterhead",
+      "Template"
+    ],
+    "viewUrl": "assets/other/Blue Lily Letterhead Dalview (004) (2) (1).docx",
+    "downloadUrl": "assets/other/Blue Lily Letterhead Dalview (004) (2) (1).docx"
+  }
+];
+
+      let activePack = "sales";
+      const list = document.getElementById("list");
+      const q = document.getElementById("q");
+
+      function currentDocs() {
+        if (activePack === "sales") return SALES_DOCS;
+        if (activePack === "rental") return RENTAL_DOCS;
+        return OTHER_DOCS;
+      }
+
+      function setPack(pack) {
+        activePack = pack;
+
+        const tabSales = document.getElementById("tabSales");
+        const tabRental = document.getElementById("tabRental");
+        const tabOther = document.getElementById("tabOther");
+
+        const isSales = pack === "sales";
+        const isRental = pack === "rental";
+        const isOther = pack === "other";
+
+        tabSales.classList.toggle("tabActive", isSales);
+        tabRental.classList.toggle("tabActive", isRental);
+        tabOther.classList.toggle("tabActive", isOther);
+
+        tabSales.setAttribute("aria-selected", String(isSales));
+        tabRental.setAttribute("aria-selected", String(isRental));
+        tabOther.setAttribute("aria-selected", String(isOther));
+
+        q.value = "";
+        render(currentDocs());
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, m => ({
+          "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+        }[m]));
+      }
+
+      function render(items) {
+        list.innerHTML = "";
+        items.forEach(d => {
+          const el = document.createElement("div");
+          el.className = "doc";
+
+          const tagsHtml = (d.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
+
+          el.innerHTML = `
+            <div class="left">
+              <div class="title" title="${escapeHtml(d.title)}">${escapeHtml(d.title)}</div>
+              <div class="meta" title="${escapeHtml(d.category)}">${escapeHtml(d.category)}</div>
+              <div class="tags">${tagsHtml}</div>
+            </div>
+            <div class="actions">
+              <a class="btn btnPrimary" href="${d.viewUrl}" target="_blank" rel="noopener noreferrer">View</a>
+              <a class="btn" href="${d.downloadUrl}" download>Download</a>
+            </div>
+          `;
+          list.appendChild(el);
+        });
+      }
+
+      function filter() {
+        const term = q.value.trim().toLowerCase();
+        const docs = currentDocs();
+        if (!term) return render(docs);
+        const out = docs.filter(d => {
+          const hay = (d.title + " " + d.category + " " + (d.tags || []).join(" ")).toLowerCase();
+          return hay.includes(term);
+        });
+        render(out);
+      }
+
+      q.addEventListener("input", filter);
+      render(currentDocs());
+    </script>
+  </body>
+</html>
